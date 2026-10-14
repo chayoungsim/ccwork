@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { normalizeTag, isDuplicateTag, validateTag, MAX_TAG_LENGTH, MAX_TAG_COUNT } from './tags';
 
 describe('normalizeTag', () => {
