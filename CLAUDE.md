@@ -21,6 +21,9 @@ npx vitest run src/components/NoteItem.test.tsx   # 단일 파일 (예시 경로
 npx vitest run -t "테스트 이름"                     # 이름으로 필터
 ```
 
+- `npm install` 시 `prepare` 스크립트가 husky hook을 설치한다
+- `/mermaid-diagram` 스킬: src/ 구조를 `docs/architecture/index.html`로 시각화 (`docs/`는 gitignore된 생성물)
+
 ## 기술 스택 / 구조
 
 - React 19, TypeScript 5 (strict, `noUnusedLocals`/`noUnusedParameters`), Vite 6
@@ -73,16 +76,16 @@ src/
 
 ## 네이밍 패턴
 
-| 대상 | 규칙 | 예시 |
-|------|------|------|
-| 컴포넌트 파일/이름 | PascalCase, 도메인 접두사 `Note` | `NoteList.tsx`, `NoteItem` |
-| 기타 파일 | camelCase | `api/notes.ts`, `types/note.ts` |
-| 콜백 props | `on` + 동사 | `onSelect`, `onDelete`, `onNewNote`, `onDone` |
-| 내부 핸들러 | `handle` + 동사(+명사) | `handleSave`, `handleSelectNote` |
-| API 함수 | HTTP 의미 동사 | `fetchNotes`, `createNote`, `updateNote`, `deleteNote` |
-| Context 액션 | UI 의미 동사 | `addNote`, `editNote`, `removeNote` |
-| Context/훅 | `XxxContext`, `XxxProvider`, `useXxx` | `NotesProvider`, `useNotes` |
-| ID props | `selectedXxxId` | `selectedNoteId` |
+| 대상               | 규칙                                  | 예시                                                   |
+| ------------------ | ------------------------------------- | ------------------------------------------------------ |
+| 컴포넌트 파일/이름 | PascalCase, 도메인 접두사 `Note`      | `NoteList.tsx`, `NoteItem`                             |
+| 기타 파일          | camelCase                             | `api/notes.ts`, `types/note.ts`                        |
+| 콜백 props         | `on` + 동사                           | `onSelect`, `onDelete`, `onNewNote`, `onDone`          |
+| 내부 핸들러        | `handle` + 동사(+명사)                | `handleSave`, `handleSelectNote`                       |
+| API 함수           | HTTP 의미 동사                        | `fetchNotes`, `createNote`, `updateNote`, `deleteNote` |
+| Context 액션       | UI 의미 동사                          | `addNote`, `editNote`, `removeNote`                    |
+| Context/훅         | `XxxContext`, `XxxProvider`, `useXxx` | `NotesProvider`, `useNotes`                            |
+| ID props           | `selectedXxxId`                       | `selectedNoteId`                                       |
 
 API 함수와 Context 액션의 동사를 일부러 다르게 쓰므로 새 기능도 이 구분을 따른다.
 
@@ -102,6 +105,17 @@ API 함수와 Context 액션의 동사를 일부러 다르게 쓰므로 새 기�
 10. **radius/shadow**: `--radius` 토큰은 미사용, `rounded-xl/2xl/3xl`과 `shadow-[...]` 임의값이 컴포넌트마다 제각각
 11. **버튼 스타일 중복**: 같은 primary 버튼 클래스가 `Layout`과 `NoteEditor`에 복붙됨 (공통 `Button` 컴포넌트 없음)
 12. **Context value 미메모이제이션**: value 객체와 함수가 매 렌더 새로 생성 (`useMemo`/`useCallback` 없음)
+
+## 커밋 규칙 (husky hook으로 강제됨)
+
+- **pre-commit**: lint-staged가 staged 파일만 처리 — `ts/tsx`는 `eslint --fix` → `prettier --write`,
+  `css/md/html/json`은 `prettier --write`. 수정분은 커밋에 자동 포함, ESLint 에러가 남으면 커밋 중단
+- **commit-msg**: commitlint(`commitlint.config.mjs`, Conventional Commits)가 `type: 제목` 형식 검사
+  - 허용 type: `feat` `fix` `docs` `style` `refactor` `test` `chore` `perf` `build` `ci` `revert`
+  - 첫 커밋의 `init`은 허용되지 않는 type이므로 사용 금지
+  - 제목은 한글. `subject-case`는 한글 제목 오탐 때문에 비활성화되어 있음
+- hook 실패 시 `--no-verify`로 우회하지 말고 원인(린트 에러, 메시지 형식)을 고친다
+- 브랜치는 `feature/기능명`, `fix/버그명`. 커밋은 작은 단위로 나눈다
 
 ## 테스트 / 주의사항
 
