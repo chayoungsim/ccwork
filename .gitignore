@@ -33,5 +33,6 @@ dist-ssr/
 CLAUDE.local.md
 .claude/hookify.*.local.md
 
-# 생성물 (mermaid-diagram 스킬 결과)
-docs/
+# 생성물 (mermaid-diagram 스킬 결과) — 기능 문서(docs/features)만 추적
+docs/*
+!docs/features/
