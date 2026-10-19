@@ -22,7 +22,7 @@ npx vitest run -t "테스트 이름"                     # 이름으로 필터
 ```
 
 - `npm install` 시 `prepare` 스크립트가 husky hook을 설치한다
-- `/mermaid-diagram` 스킬: src/ 구조를 `docs/architecture/index.html`로 시각화 (`docs/`는 gitignore된 생성물)
+- `/mermaid-diagram` 스킬: src/ 구조를 `docs/architecture/index.html`로 시각화 (`docs/`는 gitignore된 생성물, 단 `docs/design-system/`은 추적)
 
 ## 기술 스택 / 구조
 
@@ -39,6 +39,12 @@ src/
 ├── components/               # Layout, NoteList, NoteItem, NoteEditor
 └── types/note.ts             # Note 인터페이스
 ```
+
+## 디자인 시스템
+
+- 스타일/UI 작업(색상, 타이포, 간격, 컴포넌트 모양) 전에는 반드시 `docs/design-system/DESIGN.md`를 먼저 읽고 따른다
+- 1px 실선 테두리, `<hr>`, 순수 검정 그림자는 금지하고 경계는 서피스 색 차이로 표현한다 (문서의 Do/Don't 참고)
+- 문서와 기존 코드가 충돌하면 임의로 고치지 말고 차이를 알린 뒤 방향을 확인한다
 
 ## 컴포넌트 구현 패턴
 
